@@ -1,0 +1,92 @@
+/* GOOGLE FONT */
+@import url(ttp://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300);
+
+/* /////////////////////////////////////////////////////////////////////// GLOBAL STYLES */
+
+body{
+	font-family:'Open Sans', sans-serif;
+	font-weight:400;
+	font-size:18px;
+	line-height:30px;
+	color:#4f4b49;
+	-webkit-font-smoothing:antialiased;	/* mac font fix */
+	-moz-osx-font-smoothing:grayscale;
+}
+
+
+html, body{
+	height:100%;
+	background-color:#F4F4F4;
+}
+
+.singlepage-container{
+	display:table;
+	width:100%;
+	height:100%;
+}
+.singlepage-container >.align{
+	display:table-cell;
+	vertical-align:middle;
+}
+.singlepage-container >.align >.content{
+	max-width:650px;
+	margin:0 auto;
+	position:relative;
+	padding:80px 60px;
+	background-color:#fff;
+	text-align:center;
+	
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+}
+
+.singlepage-container >.align >.content .appmessage h1{
+	font-size:26px;
+	line-height:38px;
+}
+
+.singlepage-container >.align >.content .logo{
+	background:url('../../img/logo.png') 0px 0px no-repeat;
+	width:235px;
+	height:42px;
+	display:inline-block;
+	margin-bottom:60px;
+	background-size:100% auto;	/* scale proportionally */
+}
+html.svg .singlepage-container >.align >.content .logo{
+	background:url('../../img/logo.svg') 0px 0px no-repeat;
+}
+
+.singlepage-container >.align >.content h1{
+	color:#3A760A;
+	margin-bottom:30px;
+}
+.singlepage-container >.align >.content h1.failed{
+	color:#FF3B0D;
+}
+.singlepage-container >.align >.content h1.success{
+	color:#686868;
+}
+.singlepage-container >.align >.content p{
+	margin:0 auto;
+}
+
+
+*+html .singlepage-container{ overflow:hidden; position:relative; }
+*+html .singlepage-container >.align{ position:absolute; top:50%; width:100%; }
+*+html .singlepage-container >.align >.content{ position:relative; top:-50%; }
+
+@media only screen and (max-width:570px){
+	.singlepage-container >.align >.content{
+		padding:40px 30px;
+		width:90%;
+	}
+	.singlepage-container >.align >.content .logo{
+		width:150px;
+		margin:0 auto 20px auto;
+	}
+	.singlepage-container >.align >.content h1{
+		font-size:30px;
+	}
+}

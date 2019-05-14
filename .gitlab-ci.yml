@@ -1,0 +1,13 @@
+stages:
+  - deploy
+
+stage_deploy:
+  stage: deploy
+  only:
+    - UAT
+  script:
+    - echo "Hello world"
+  after_script:
+    - ssh codersacademy@web1.codersacademy.nl -p5022 -C "/home/codersacademy/CamhatchUpdate.sh"
+  tags:
+    - development-temp
