@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use function foo\func;
 use Illuminate\Http\Request AS Httprequest;
 use App\Molliepayment;
 use App\Http\Requests\SubmitShopRequest;
@@ -58,9 +59,10 @@ class ShopController extends Controller
 
             // calculate the avarage ratings
             $avarage_review = round($average_review / count($reviews_count));
-        }
+            return view('site.pages.shop', compact('avarage_review', 'reviews_count'))->nest('reviews', 'site.partials.reviews', compact('reviews'));
 
-        return view('site.pages.shop', compact('avarage_review', 'reviews_count'))->nest('reviews', 'site.partials.reviews', compact('reviews'));
+        }
+        return view('site.pages.shop', compact('reviews_count'))->nest('reviews', 'site.partials.reviews', compact('reviews'));
     }
 
     public function getInstallation()
@@ -149,6 +151,7 @@ class ShopController extends Controller
         if (null !== Input::get('quantity')) {
             // validate the quanity
             $validator = \Validator::make(
+                ['country' => Input::get('country')],
                 ['quantity' => Input::get('quantity')],
                 ['quantity' => 'required|numeric|min:1']
             );
@@ -180,7 +183,7 @@ class ShopController extends Controller
         $voucher = Voucher::where('vouchercode', '=' ,(Input::get('voucher')))->first();
         number_format($price ,2,'.' , '');
 
-	if ($country->continents != 'eu'){
+	if ($country && $country->continents != 'eu'){
 	    $btw_include = 0.00;
  	    number_format($btw_include , 2, '.', ',');
 	}
@@ -322,13 +325,14 @@ class ShopController extends Controller
                 'plan' => config('config.shipping_plan.bpost')
             ];
         }
-
         $v = $request->session()->get('voucher_code');
+        $hasVoucher = false;
         $vouchercode = '';
         if (!empty($v)) {
             $vouchercode = $v;
             $voucher = Voucher::where('vouchercode', '=', $v)->first();
             if ($voucher != null) {
+                $hasVoucher = true;
                 if ($voucher->minimum_order_quantity <= Cart::count()) {
                     if ($voucher->amount > 0) {
                         if ($voucher->expires_at >= Carbon::today()->toDateString()) {
@@ -359,7 +363,12 @@ class ShopController extends Controller
         $total_price = $total_price + $shipping['cost'];
         $total_price = number_format($total_price, 2, '.', ',');
 
-
+    if(!$hasVoucher){
+        return view('site.pages.checkout',
+            compact('content', 'location', 'total_price','price','country', 'discount', 'vouchercode'))
+            ->nest('order_overview', 'site.partials.order_overview',
+                compact('content', 'shipping', 'total_price','price', 'btw_include',  'discount', 'percent'));
+    }
         return view('site.pages.checkout',
             compact('content', 'location', 'total_price','price','country','voucher', 'discount', 'vouchercode'))
             ->nest('order_overview', 'site.partials.order_overview',
@@ -483,6 +492,7 @@ class ShopController extends Controller
         $order->country = Country::where('isocode', $order->country)->first();
         if( $order == null ){
             $order = Country::where('country', $order->country )->first();
+            dd($order);
         }
 
         $data = [
@@ -556,9 +566,14 @@ class ShopController extends Controller
             }
 
             $country = Country::where('isocode', $order->country)->first();
+
             if ($country == null) {
-                $country = Country::where('country', $order->country)->first();
-                if ($voucher->amount > 0) {
+                $country = Country::where(function($query) use ($order){
+                    $query->where('country_en','=',$order->country)
+                          ->orWhere('country_nl','=',$order->country);
+                })->get()->first();
+
+                if ($voucher && $voucher->amount > 0) {
                     $voucher->amount = $voucher->amount - 1;
                     $voucher->update();
                 }

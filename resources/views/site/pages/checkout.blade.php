@@ -481,6 +481,7 @@
 
                             $('#order_overview').html(data.view);
                             Ladda.bind('#place-order');
+                            location.reload();
                         }
 
                         $('#place-order').prop('disabled', false);
@@ -488,6 +489,7 @@
                 })
 
                 $('#voucher-Update').click(function() {
+                    console.log('clicked')
                     $('#place-order').prop('disabled', true);
 
                     var data = {
@@ -516,6 +518,7 @@
 
                             $('#order_overview').html(data.view);
                             Ladda.bind('#place-order');
+
                         }
 
                         $('#place-order').prop('disabled', false);
