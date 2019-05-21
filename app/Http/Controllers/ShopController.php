@@ -45,7 +45,7 @@ class ShopController extends Controller
         }
 
         // fetch the total reviews
-        $reviews = Review::where('visible', 1)->orderBy('id', 'asc')->take(4)->get();
+        $reviews = Review::where('visible', 1)->orderBy('id', 'desc')->take(4)->get();
 
         // fetch 4 reviews
         $reviews_count = Review::where('visible', 1)->get();
