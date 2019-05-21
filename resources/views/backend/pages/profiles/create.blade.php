@@ -30,7 +30,7 @@
 
                     </div>
                     <div class="btn-group pull-right" style="margin-right: 1%;">
-                        <a href="#" class="btn btn-primary">Overview</a>
+                        <a href="/admin/profiles" class="btn btn-primary">Overview</a>
                     </div>
                     <br>
                     <br>

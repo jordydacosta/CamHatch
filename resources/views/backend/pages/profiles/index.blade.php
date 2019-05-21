@@ -27,7 +27,7 @@
                         <a href="{{ route('profiles.create') }}" class="btn btn-primary glyphicon-plus"> Create new user</a>
                     </div>
                     <div class="btn-group pull-right" style="margin-right: 1%;">
-                        <a href="#" class="btn btn-primary">Overview</a>
+                        <a href="/admin/profiles" class="btn btn-primary">Overview</a>
                     </div>
                     <br>
                     <br>
